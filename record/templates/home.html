@@ -1,0 +1,364 @@
+{% extends "nav.html" %}
+{% block main %}
+<div class="home-container">
+    <div class="welcome-section">
+        <h1>📚 Welcome to Library Management System</h1>
+        <p class="subtitle">Manage your personal library with ease</p>
+    </div>
+
+    <div class="library-stats">
+        <div class="stat-card">
+            <div class="stat-number">{{ total_books }}</div>
+            <div class="stat-label">Total Books</div>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-grid">
+            <div class="action-card add-card">
+                <div class="action-icon">➕</div>
+                <h3>Add Book</h3>
+                <p>Add a new book to your library collection</p>
+                <a href="/addbook/" class="action-btn">Add Book</a>
+            </div>
+
+            <div class="action-card view-card">
+                <div class="action-icon">📖</div>
+                <h3>View Books</h3>
+                <p>Browse all books with search and filter options</p>
+                <a href="/viewbooks/" class="action-btn">View Books</a>
+            </div>
+
+            <div class="action-card edit-card">
+                <div class="action-icon">✏️</div>
+                <h3>Update Book</h3>
+                <p>Edit book information and details</p>
+                <a href="/updatebooks/" class="action-btn">Update Book</a>
+            </div>
+
+            <div class="action-card delete-card">
+                <div class="action-icon">🗑️</div>
+                <h3>Delete Book</h3>
+                <p>Remove books from your library</p>
+                <a href="/delbook/" class="action-btn">Delete Book</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-library">
+        <h2>About Your Library</h2>
+        <div class="about-content">
+            <p>
+                This Library Management System is your personal digital library assistant. Whether you're a voracious reader 
+                or someone who wants to keep track of their book collection, this system makes it easy to:
+            </p>
+            <ul>
+                <li><strong>Add Books:</strong> Record all your books with detailed information including title, author, ISBN, and description</li>
+                <li><strong>Organize:</strong> Browse your entire collection with advanced search and sorting options</li>
+                <li><strong>Update:</strong> Keep your book information current and accurate</li>
+                <li><strong>Manage:</strong> Remove books when needed and maintain your collection</li>
+            </ul>
+            <p>
+                Start by adding your first book and build your personal library today!
+            </p>
+        </div>
+    </div>
+
+    <div class="features-section">
+        <h2>Features</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <h4>📋 Comprehensive Database</h4>
+                <p>Store detailed information about each book including author, ISBN, publication date, and more</p>
+            </div>
+            <div class="feature-item">
+                <h4>🔍 Advanced Search</h4>
+                <p>Quickly find books by title, author, or ISBN with our powerful search functionality</p>
+            </div>
+            <div class="feature-item">
+                <h4>📊 Sorting Options</h4>
+                <p>Sort your collection by title, author, publication date, or when you added it</p>
+            </div>
+            <div class="feature-item">
+                <h4>🛠️ Full CRUD Operations</h4>
+                <p>Create, read, update, and delete books - complete control over your library</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .home-container {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .welcome-section {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        color: white;
+    }
+
+    .welcome-section h1 {
+        color: white;
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.95;
+    }
+
+    .library-stats {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 3rem;
+        gap: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        min-width: 150px;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #7f8c8d;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .quick-actions {
+        margin-bottom: 3rem;
+    }
+
+    .quick-actions h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #2c3e50;
+        font-size: 1.8rem;
+    }
+
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .action-card {
+        background: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-top: 4px solid;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .add-card {
+        border-top-color: #27ae60;
+    }
+
+    .view-card {
+        border-top-color: #3498db;
+    }
+
+    .edit-card {
+        border-top-color: #f39c12;
+    }
+
+    .delete-card {
+        border-top-color: #e74c3c;
+    }
+
+    .action-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .action-card h3 {
+        color: #2c3e50;
+        margin-bottom: 0.75rem;
+        font-size: 1.3rem;
+    }
+
+    .action-card p {
+        color: #7f8c8d;
+        margin-bottom: 1.5rem;
+        flex: 1;
+        font-size: 0.95rem;
+    }
+
+    .action-btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-card .action-btn {
+        background-color: #27ae60;
+    }
+
+    .add-card .action-btn:hover {
+        background-color: #229954;
+    }
+
+    .view-card .action-btn {
+        background-color: #3498db;
+    }
+
+    .view-card .action-btn:hover {
+        background-color: #2980b9;
+    }
+
+    .edit-card .action-btn {
+        background-color: #f39c12;
+    }
+
+    .edit-card .action-btn:hover {
+        background-color: #e67e22;
+    }
+
+    .delete-card .action-btn {
+        background-color: #e74c3c;
+    }
+
+    .delete-card .action-btn:hover {
+        background-color: #c0392b;
+    }
+
+    .about-library {
+        background: white;
+        border-radius: 10px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 3rem;
+    }
+
+    .about-library h2 {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+    }
+
+    .about-content p {
+        color: #555;
+        font-size: 1rem;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .about-content ul {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+    }
+
+    .about-content li {
+        color: #555;
+        font-size: 1rem;
+        line-height: 1.8;
+        padding: 0.5rem 0;
+        padding-left: 2rem;
+        position: relative;
+    }
+
+    .about-content li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #27ae60;
+        font-weight: bold;
+    }
+
+    .features-section {
+        margin-bottom: 2rem;
+    }
+
+    .features-section h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #2c3e50;
+        font-size: 1.8rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .feature-item {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .feature-item h4 {
+        color: #2c3e50;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    .feature-item p {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        .welcome-section h1 {
+            font-size: 1.8rem;
+        }
+
+        .action-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .library-stats {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>
+{% endblock main %}

@@ -1,0 +1,273 @@
+{% extends "nav.html" %}
+{% block main %}
+<h1>🗑️ Delete a Book</h1>
+
+{% if messages %}
+    <div class="alert-messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if book %}
+    <div class="delete-confirmation">
+        <div class="confirmation-card">
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete the following book?</p>
+            
+            <div class="book-info">
+                <div class="info-item">
+                    <strong>Title:</strong> {{ book.title }}
+                </div>
+                <div class="info-item">
+                    <strong>Author:</strong> {{ book.author }}
+                </div>
+                <div class="info-item">
+                    <strong>ISBN:</strong> {{ book.isbn }}
+                </div>
+                <div class="info-item">
+                    <strong>Publication Date:</strong> {{ book.publication_date|date:"M d, Y" }}
+                </div>
+            </div>
+
+            <form method="POST" class="delete-form">
+                {% csrf_token %}
+                <input type="hidden" name="book_id" value="{{ book.id }}">
+                <div class="delete-actions">
+                    <button type="submit" class="btn-delete">Delete Permanently</button>
+                    <a href="{% url 'home' %}" class="btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <div class="books-container">
+        {% if books %}
+            <p class="instruction">Select a book to delete:</p>
+            <div class="books-grid">
+                {% for book in books %}
+                    <div class="book-card">
+                        <div class="book-header">
+                            <h3>{{ book.title }}</h3>
+                            <span class="author">by {{ book.author }}</span>
+                        </div>
+                        <div class="book-details">
+                            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                            <p><strong>Publication Date:</strong> {{ book.publication_date|date:"M d, Y" }}</p>
+                            <p><strong>Pages:</strong> {{ book.pages }}</p>
+                        </div>
+                        <div class="book-actions">
+                            <a href="/delbook/{{ book.id }}/" class="delete-btn">Delete This Book</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-books">
+                <p>No books available to delete. Visit <a href="/">home</a> to add books.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}
+
+<style>
+    .alert-messages {
+        margin-bottom: 2rem;
+    }
+
+    .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: inherit;
+    }
+
+    .delete-confirmation {
+        max-width: 600px;
+        margin: 2rem auto;
+    }
+
+    .confirmation-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #e74c3c;
+    }
+
+    .confirmation-card h2 {
+        color: #e74c3c;
+        margin-bottom: 1rem;
+    }
+
+    .book-info {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 5px;
+        margin: 1.5rem 0;
+    }
+
+    .info-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .delete-form {
+        margin-top: 2rem;
+    }
+
+    .delete-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-delete {
+        padding: 0.75rem 2rem;
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .btn-delete:hover {
+        background-color: #c0392b;
+    }
+
+    .btn-cancel {
+        padding: 0.75rem 2rem;
+        background-color: #95a5a6;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background-color: #7f8c8d;
+    }
+
+    .instruction {
+        font-size: 1.1rem;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+
+    .book-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .book-header h3 {
+        font-size: 1.2rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .author {
+        color: #7f8c8d;
+        font-style: italic;
+        font-size: 0.95rem;
+    }
+
+    .book-details {
+        margin: 1rem 0;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .book-details p {
+        margin: 0.5rem 0;
+    }
+
+    .book-actions {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+
+    .delete-btn {
+        display: block;
+        padding: 0.5rem 1rem;
+        background-color: #e74c3c;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .delete-btn:hover {
+        background-color: #c0392b;
+    }
+
+    .no-books {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .no-books p {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+    }
+
+    .no-books a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .no-books a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock main %}

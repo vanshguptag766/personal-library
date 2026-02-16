@@ -1,0 +1,189 @@
+{% extends "nav.html" %}
+{% block main %}
+<h1>✏️ Edit Book Details</h1>
+
+<div class="form-container">
+    <div class="book-title-info">
+        <p>Editing: <strong>{{ book.title }}</strong></p>
+    </div>
+
+    <form method="POST" action="/updatebook/{{ book.id }}/" class="book-form">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="error-messages">
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+            {{ form.title }}
+            {% if form.title.errors %}
+                <span class="error-text">{{ form.title.errors.0 }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.author.id_for_label }}">{{ form.author.label }}</label>
+            {{ form.author }}
+            {% if form.author.errors %}
+                <span class="error-text">{{ form.author.errors.0 }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.isbn.id_for_label }}">{{ form.isbn.label }}</label>
+            {{ form.isbn }}
+            {% if form.isbn.errors %}
+                <span class="error-text">{{ form.isbn.errors.0 }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.publication_date.id_for_label }}">{{ form.publication_date.label }}</label>
+            {{ form.publication_date }}
+            {% if form.publication_date.errors %}
+                <span class="error-text">{{ form.publication_date.errors.0 }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.pages.id_for_label }}">{{ form.pages.label }}</label>
+            {{ form.pages }}
+            {% if form.pages.errors %}
+                <span class="error-text">{{ form.pages.errors.0 }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+            {{ form.description }}
+            {% if form.description.errors %}
+                <span class="error-text">{{ form.description.errors.0 }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Update Book</button>
+            <a href="/viewbooks/" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .book-title-info {
+        background-color: #ecf0f1;
+        border-left: 4px solid #f39c12;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 5px;
+    }
+
+    .book-title-info p {
+        margin: 0;
+        color: #2c3e50;
+    }
+
+    .book-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.75rem;
+        border: 1px solid #bdc3c7;
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #f39c12;
+        box-shadow: 0 0 5px rgba(243, 156, 18, 0.3);
+    }
+
+    .error-text {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .error-messages {
+        margin-bottom: 1rem;
+    }
+
+    .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 1rem;
+        border-radius: 5px;
+        border: 1px solid #f5c6cb;
+        margin-bottom: 1rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-submit {
+        padding: 0.75rem 2rem;
+        background-color: #f39c12;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .btn-submit:hover {
+        background-color: #e67e22;
+    }
+
+    .btn-cancel {
+        padding: 0.75rem 2rem;
+        background-color: #95a5a6;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background-color: #7f8c8d;
+    }
+</style>
+{% endblock main %}

@@ -1,0 +1,398 @@
+{% extends "nav.html" %}
+{% block main %}
+<div class="viewbooks-header">
+    <h1>📖 Browse Library</h1>
+    <p class="library-stats">Total Books: <strong>{{ total_books }}</strong></p>
+</div>
+
+<div class="search-section">
+    <form method="GET" class="search-form">
+        <div class="search-controls">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="Search by title, author, or ISBN..." 
+                    value="{{ search_query }}"
+                    class="search-input"
+                >
+                <button type="submit" class="search-btn">🔍 Search</button>
+            </div>
+            
+            <div class="sort-box">
+                <label for="sort">Sort by:</label>
+                <select name="sort" id="sort" class="sort-select" onchange="this.form.submit()">
+                    <option value="-created_at" {% if sort_by == '-created_at' %}selected{% endif %}>Newest First</option>
+                    <option value="created_at" {% if sort_by == 'created_at' %}selected{% endif %}>Oldest First</option>
+                    <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title (A-Z)</option>
+                    <option value="-title" {% if sort_by == '-title' %}selected{% endif %}>Title (Z-A)</option>
+                    <option value="author" {% if sort_by == 'author' %}selected{% endif %}>Author (A-Z)</option>
+                    <option value="-author" {% if sort_by == '-author' %}selected{% endif %}>Author (Z-A)</option>
+                    <option value="publication_date" {% if sort_by == 'publication_date' %}selected{% endif %}>Publication Date (Oldest)</option>
+                    <option value="-publication_date" {% if sort_by == '-publication_date' %}selected{% endif %}>Publication Date (Newest)</option>
+                </select>
+            </div>
+        </div>
+    </form>
+
+    {% if search_query %}
+        <div class="search-results-info">
+            <p>Found <strong>{{ result_count }}</strong> book(s) matching "<strong>{{ search_query }}</strong>"
+                <a href="/viewbooks/" class="clear-search">Clear Search</a>
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+{% if books %}
+    <div class="books-container">
+        <div class="books-grid">
+            {% for book in books %}
+                <div class="book-card">
+                    <div class="book-card-header">
+                        <h2>{{ book.title }}</h2>
+                        <span class="book-isbn">ISBN: {{ book.isbn }}</span>
+                    </div>
+                    
+                    <div class="book-card-body">
+                        <div class="book-info-item">
+                            <span class="label">Author:</span>
+                            <span class="value">{{ book.author }}</span>
+                        </div>
+                        
+                        <div class="book-info-item">
+                            <span class="label">Published:</span>
+                            <span class="value">{{ book.publication_date|date:"M d, Y" }}</span>
+                        </div>
+                        
+                        <div class="book-info-item">
+                            <span class="label">Pages:</span>
+                            <span class="value">{{ book.pages }}</span>
+                        </div>
+                        
+                        <div class="book-info-item">
+                            <span class="label">Added:</span>
+                            <span class="value">{{ book.created_at|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                    
+                    {% if book.description %}
+                        <div class="book-description">
+                            <p>{{ book.description|truncatewords:30 }}</p>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="book-card-footer">
+                        <a href="/updatebook/{{ book.id }}/" class="btn-edit">Edit</a>
+                        <a href="/delbook/{{ book.id }}/" class="btn-delete">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <div class="no-results">
+        <p>📭 No books found.</p>
+        {% if search_query %}
+            <p>Try a different search term or <a href="/viewbooks/">view all books</a></p>
+        {% else %}
+            <p><a href="/addbook/">Add a book</a> to get started!</p>
+        {% endif %}
+    </div>
+{% endif %}
+
+<style>
+    .viewbooks-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .viewbooks-header h1 {
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .library-stats {
+        font-size: 1rem;
+        color: #7f8c8d;
+    }
+
+    .search-section {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .search-form {
+        margin: 0;
+    }
+
+    .search-controls {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: flex-end;
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 250px;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #bdc3c7;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+    }
+
+    .search-btn {
+        padding: 0.75rem 1.5rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        font-size: 1rem;
+        white-space: nowrap;
+    }
+
+    .search-btn:hover {
+        background-color: #2980b9;
+    }
+
+    .sort-box {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .sort-box label {
+        font-weight: bold;
+        color: #2c3e50;
+        white-space: nowrap;
+    }
+
+    .sort-select {
+        padding: 0.75rem;
+        border: 1px solid #bdc3c7;
+        border-radius: 5px;
+        font-size: 1rem;
+        background-color: white;
+        cursor: pointer;
+        transition: border-color 0.3s ease;
+    }
+
+    .sort-select:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+    }
+
+    .search-results-info {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #ecf0f1;
+        font-size: 0.95rem;
+        color: #555;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .clear-search {
+        color: #e74c3c;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+
+    .clear-search:hover {
+        color: #c0392b;
+        text-decoration: underline;
+    }
+
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .book-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .book-card-header {
+        padding: 1.25rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .book-card-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        word-break: break-word;
+    }
+
+    .book-isbn {
+        display: block;
+        font-size: 0.85rem;
+        opacity: 0.9;
+        margin-top: 0.5rem;
+    }
+
+    .book-card-body {
+        padding: 1.25rem;
+        flex: 1;
+    }
+
+    .book-info-item {
+        display: flex;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .book-info-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .book-info-item .label {
+        font-weight: bold;
+        color: #2c3e50;
+        min-width: 90px;
+    }
+
+    .book-info-item .value {
+        color: #555;
+        flex: 1;
+    }
+
+    .book-description {
+        padding: 0 1.25rem 1.25rem;
+        background-color: #f8f9fa;
+        border-top: 1px solid #ecf0f1;
+    }
+
+    .book-description p {
+        margin: 0;
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .book-card-footer {
+        padding: 1rem 1.25rem;
+        background-color: #f8f9fa;
+        border-top: 1px solid #ecf0f1;
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn-edit {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #f39c12;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        font-weight: bold;
+        font-size: 0.9rem;
+        flex: 1;
+        text-align: center;
+    }
+
+    .btn-edit:hover {
+        background-color: #e67e22;
+    }
+
+    .btn-delete {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #e74c3c;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        font-weight: bold;
+        font-size: 0.9rem;
+        flex: 1;
+        text-align: center;
+    }
+
+    .btn-delete:hover {
+        background-color: #c0392b;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .no-results p {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+        margin: 0.5rem 0;
+    }
+
+    .no-results a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .no-results a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .search-controls {
+            flex-direction: column;
+        }
+
+        .search-box {
+            width: 100%;
+        }
+
+        .sort-box {
+            width: 100%;
+        }
+
+        .sort-select {
+            width: 100%;
+        }
+
+        .books-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock main %}

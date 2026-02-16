@@ -1,0 +1,140 @@
+{% extends "nav.html" %}
+{% block main %}
+<h1>✏️ Update a Book</h1>
+
+<div class="update-intro">
+    <p>Select a book to update its information:</p>
+</div>
+
+{% if books %}
+    <div class="books-container">
+        <div class="books-grid">
+            {% for book in books %}
+                <div class="book-card">
+                    <div class="book-header">
+                        <h3>{{ book.title }}</h3>
+                        <span class="author">by {{ book.author }}</span>
+                    </div>
+                    <div class="book-details">
+                        <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                        <p><strong>Publication Date:</strong> {{ book.publication_date|date:"M d, Y" }}</p>
+                        <p><strong>Pages:</strong> {{ book.pages }}</p>
+                    </div>
+                    <div class="book-actions">
+                        <a href="/updatebook/{{ book.id }}/" class="edit-btn">Edit This Book</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <div class="no-books">
+        <p>No books available to update. Visit <a href="/addbook/">add book</a> to create new books.</p>
+    </div>
+{% endif %}
+
+<style>
+    .update-intro {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .update-intro p {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .book-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .book-header h3 {
+        font-size: 1.2rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        margin-top: 0;
+    }
+
+    .author {
+        color: #7f8c8d;
+        font-style: italic;
+        font-size: 0.95rem;
+    }
+
+    .book-details {
+        margin: 1rem 0;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .book-details p {
+        margin: 0.5rem 0;
+    }
+
+    .book-actions {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+
+    .edit-btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #f39c12;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    .edit-btn:hover {
+        background-color: #e67e22;
+    }
+
+    .no-books {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .no-books p {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+    }
+
+    .no-books a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .no-books a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock main %}
